@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>MSVC</title>
+<div style="text-align: left;"><h2>MSVC</h2></div>
+
+
+Будем использовать Wine.
+<pre>
+sudo apt install winehq-stable
+</pre>
+
+1. Компилятор: <BR>
+IDE платное, утилиты командной строки бесплатные (На сайте microsoft уже не найти, <a href="./VCToolkitSetup.exe">брать тут</a>), я использовал VCToolkit2003. <BR>
+2. Утилита pe2kos: <BR>
+Ее можно собрать из исходников: SVN/contrib/sdk/sources/pe2kos, либо скачать <a href="./pe2kos.exe">тут</a>.
+<BR>
+Начнем!
+<BR>
+Возьмем VCToolkitSetup.exe и установим,
+он установится в каталоги wine'а, 
+неудобно. <BR>
+Переместим содержимое "/home/USER/.wine/drive_c/Program Files (x86)/Microsoft Visual C++ Toolkit 2003" скажем, в "/home/USER/MSVC". <BR>
+В папку /home/USER/MSVC/bin закинем pe2kos.exe.
+Дальше нужно протестировать работоспособность:
+Скачаем исходники table, с SVN, 
+поместим туда compile.sh следующего содержания:
+<pre>
+dir=/home/USER/MSVC
+wine $dir/bin/cl /c /O2 /nologo -I$dir/include *.cpp
+wine $dir/bin/link /nologo /entry:crtStartUp /subsystem:native /base:0 /fixed /align:16 /nodefaultlib hello.obj *.obj
+wine $dir/bin/pe2kos hello.exe table.kex
+rm hello.exe
+rm *.obj
+</pre>
+
+Запустим.
+Если все хорошо, значит вы можете удобно, одним скриптом компилировать MSVC программы!
+
+</body>
+</html>
