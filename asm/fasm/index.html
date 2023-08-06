@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<body>
+<title>FASM</title>
+<div style="text-align: left;"><h2>FASM</h2></div>
+
+Самый родной, удобный язык для KolibriOS <BR>
+<h2>Пишем с макросами</h2>
+Для этого вам понадобятся все *.inc файлы, из директории SVN/programs/, а также пример-исходник.
+<BR>
+Возьмем все те *.inc файлы, и поместим их в пустую папку. Далее создадим там файл *.asm с любым именем. Поместим в него следующий код:
+<BR>
+<pre>
+include "macros.inc"
+
+MEOS_APP_START
+CODE
+; Код
+
+DATA
+; Данные
+UDATA
+MEOS_APP_END
+</pre><BR>
+Это простейший код, с макросами, но он ничего не делает.
+<BR>
+Вот такой же код, с макросами, но он уже рисует окно, и текст (код в архиве ниже, test_sm.asm)
+<BR>
+Какие параметры у сисфункций можно почитать на вики, либо в sysfuncr.txt. А вот как вызывать функции, покажу: <BR>
+
+<pre>
+; в стиле "Без макросов":
+mov eax, 12 ; помещаем номер функции
+mov ebx, 1  ; помещаем номер подфункции
+int 0x40    ; вызываем системное прерывание
+
+; с макросом mcall:
+mcall 12, 1
+</pre>
+Но мне больше нравится без mcall. <BR>
+
+<h2>Пишем без макросов</h2>
+Пример в архиве ниже. <BR>
+Главное отличие, что самому нужно прописывать заголовок программы и прочее, и нельзя использовать mcall.
+
+<h2>Компиляция</h2>А точнее, ассемблирование!
+<pre>
+fasm test.asm test.kex
+</pre>
+
+<h2>Итог</h2>Мне удобней писать с макросами, но без mcall!
+<BR><h2>Ссылки:</h2>
+<a href="http://wiki.kolibrios.org/wiki/Category:SysCalls">Сисфункции на вики</a><BR>
+<a href="http://websvn.kolibrios.org/filedetails.php?repname=Kolibri+OS&path=%2Fkernel%2Ftrunk%2Fdocs%2Fsysfuncr.txt">Файл sysfuncr.txt</a><BR>
+<a href="./fasm_tests.zip">Примеры из статьи</a><BR>
+
+</body>
+</html>
